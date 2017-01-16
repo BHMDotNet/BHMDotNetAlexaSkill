@@ -48,14 +48,19 @@ namespace BHMDotNetAlexaSkill
                 }
                 else if ("UpcomingEvent".Equals(input.Request.Intent.Name))
                 {
-   
+                    var date = input.Request.Intent.Slots.Any() ? DateTime.Parse(input.Request.Intent.Slots.FirstOrDefault(x => x.Key == "Date").Value.Value) : DateTime.Now ;
+                    log.LogLine($"Date understood as {date.ToString()}");
+
+                    log.LogLine($"New request for {input.Session.User.AccessToken}");
                     var helper = new MeetupApiHelper(input.Session.User.AccessToken);
-                    var upcomingEvent = await helper.GetUpcomingEvent();
+                    var upcomingEvent = await helper.GetUpcomingEvent(date);
 
                     log.LogLine($"Got response from Meetup{upcomingEvent}");
 
                     innerResponse = new PlainTextOutputSpeech();
                     (innerResponse as PlainTextOutputSpeech).Text = $"The next event is {upcomingEvent.name}.";
+
+                  //  if(upcomingEvent)
                 }
 
 
