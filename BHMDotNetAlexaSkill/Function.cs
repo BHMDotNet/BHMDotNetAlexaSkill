@@ -15,14 +15,15 @@ namespace BHMDotNetAlexaSkill
 {
     public class Function
     {
-        
+        const string APIKEY = "";
+
         /// <summary>
         /// A simple function that takes a string and does a ToUpper
         /// </summary>
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public SkillResponse FunctionHandler(SkillRequest input, ILambdaContext context)
+        public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
         {
             Response response;
             IOutputSpeech innerResponse = null;
@@ -34,22 +35,22 @@ namespace BHMDotNetAlexaSkill
                 log.LogLine($"Default LaunchRequest made");
 
                 innerResponse = new PlainTextOutputSpeech();
-                (innerResponse as PlainTextOutputSpeech).Text = "Welcome to number functions.  You can ask us to add numbers!";
+                (innerResponse as PlainTextOutputSpeech).Text = "Welcome to the Birmingham .NET Meetup.  You can ask me about upcoming meetups and events";
             }
             else if (input.GetRequestType() == typeof(Slight.Alexa.Framework.Models.Requests.RequestTypes.IIntentRequest))
             {
                 // intent request, process the intent
                 log.LogLine($"Intent Requested {input.Request.Intent.Name}");
 
-                // AddNumbersIntent
-                // get the slots
-                var n1 = Convert.ToDouble(input.Request.Intent.Slots["firstnum"].Value);
-                var n2 = Convert.ToDouble(input.Request.Intent.Slots["secondnum"].Value);
+                if("UpcomingEvent".Equals(input.Request.Intent.Name))
+                {
+                    var helper = new MeetupApiHelper(APIKEY);
+                    var upcomingEvent = await helper.GetUpcomingEvent();
 
-                double result = n1 + n2;
+                    innerResponse = new PlainTextOutputSpeech();
+                    (innerResponse as PlainTextOutputSpeech).Text = $"The next event is {upcomingEvent.Name}.";
+                }
 
-                innerResponse = new PlainTextOutputSpeech();
-                (innerResponse as PlainTextOutputSpeech).Text = $"The result is {result.ToString()}.";
 
             }
             response = new Response();
