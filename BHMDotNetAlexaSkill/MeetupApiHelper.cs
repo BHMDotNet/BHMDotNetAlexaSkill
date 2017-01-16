@@ -28,30 +28,30 @@ namespace BHMDotNetAlexaSkill
 
         public async Task<Event> GetUpcomingEvent()
         {
-            Event upcomingEvent = null;
+            IList<RootEventObject> upcomingEvents = null;
 
-            try
-            {
+            //try
+            //{
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
+                    //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
                     var data = await client.GetAsync(string.Concat(BASE_URL, EVENTS_URL));
                     var jsonResponse = await data.Content.ReadAsStringAsync();
 
                     if (jsonResponse != null)
                     {
-                        
-                        upcomingEvent = JsonConvert.DeserializeObject<Event>(jsonResponse);
+
+                        upcomingEvents = JsonConvert.DeserializeObject<IList<RootEventObject>>(jsonResponse);
                     }
 
-                    return upcomingEvent;
+                    return upcomingEvents.FirstOrDefault().Event;
                 }
-            }
+            //}
 
-            catch (WebException exception)
-            {
-                throw new WebException("An error has occurred while calling GetUpcomingEvents method: " + exception.Message);
-            }
+            //catch (WebException exception)
+            //{
+            //    throw new WebException("An error has occurred while calling GetUpcomingEvents method: " + exception.Message);
+            //}
         } 
     }
 }

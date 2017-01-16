@@ -46,15 +46,18 @@ namespace BHMDotNetAlexaSkill
                 if ("Test".Equals(input.Request.Intent.Name))
                 {
                     innerResponse = new PlainTextOutputSpeech();
-                    (innerResponse as PlainTextOutputSpeech).Text = "Atomic batteries to power. Turbines to speed.All systems online and nominal.";
+                    (innerResponse as PlainTextOutputSpeech).Text = "Atomic batteries to power. Turbines to speed. All systems online and nominal.";
                 }
                 else if ("UpcomingEvent".Equals(input.Request.Intent.Name))
                 {
+   
                     var helper = new MeetupApiHelper(APIKEY);
                     var upcomingEvent = await helper.GetUpcomingEvent();
 
+                    log.LogLine($"Got response from Meetup{upcomingEvent}");
+
                     innerResponse = new PlainTextOutputSpeech();
-                    (innerResponse as PlainTextOutputSpeech).Text = $"The next event is {upcomingEvent.Name}.";
+                    (innerResponse as PlainTextOutputSpeech).Text = $"The next event is {upcomingEvent.name}.";
                 }
 
 
