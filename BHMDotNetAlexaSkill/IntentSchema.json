@@ -1,0 +1,21 @@
+﻿{
+  "intents": [
+    {
+      "intent": "Test"
+    },
+    {
+
+      "intent": "UpcomingEvent",
+      "slots": [
+        {
+          "name": "ItemName",
+          "type": "ITEM_NAME"
+        },
+        {
+          "name": "BoardName",
+          "type": "BOARD_NAME"
+        }
+      ]
+    }
+  ]
+}
