@@ -34,7 +34,8 @@ namespace BHMDotNetAlexaSkill.Entities
         public string who { get; set; }
     }
 
-    public class Event
+
+    public class RootEventObject
     {
         public long created { get; set; }
         public string id { get; set; }
@@ -51,11 +52,6 @@ namespace BHMDotNetAlexaSkill.Entities
         public int manual_attendance_count { get; set; }
         public string description { get; set; }
         public string visibility { get; set; }
-    }
-
-    public class RootEventObject
-    {
-        public Event Event { get; set; }
     }
 
 }

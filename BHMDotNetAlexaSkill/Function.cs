@@ -15,8 +15,6 @@ namespace BHMDotNetAlexaSkill
 {
     public class Function
     {
-        const string APIKEY = "";
-
         /// <summary>
         /// A simple function that takes a string and does a ToUpper
         /// </summary>
@@ -51,7 +49,7 @@ namespace BHMDotNetAlexaSkill
                 else if ("UpcomingEvent".Equals(input.Request.Intent.Name))
                 {
    
-                    var helper = new MeetupApiHelper(APIKEY);
+                    var helper = new MeetupApiHelper(input.Session.User.AccessToken);
                     var upcomingEvent = await helper.GetUpcomingEvent();
 
                     log.LogLine($"Got response from Meetup{upcomingEvent}");

@@ -14,7 +14,7 @@ namespace BHMDotNetAlexaSkill
         //Base URL for accesing the Meetup.com API
         const string BASE_URL = "https://api.meetup.com/";
         //URL for accessing events
-        const string EVENTS_URL = "/Birmingham-NET-Meetup/events";
+        const string EVENTS_URL = "Birmingham-NET-Meetup/events";
         //Access token if you use authentication
         private string _accessToken;
         //Address of your Web Api
@@ -26,15 +26,15 @@ namespace BHMDotNetAlexaSkill
             _accessToken = accessToken;
         }
 
-        public async Task<Event> GetUpcomingEvent()
+        public async Task<RootEventObject> GetUpcomingEvent()
         {
             IList<RootEventObject> upcomingEvents = null;
 
-            //try
-            //{
+            try
+            {
                 using (HttpClient client = new HttpClient())
                 {
-                    //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
                     var data = await client.GetAsync(string.Concat(BASE_URL, EVENTS_URL));
                     var jsonResponse = await data.Content.ReadAsStringAsync();
 
@@ -44,14 +44,14 @@ namespace BHMDotNetAlexaSkill
                         upcomingEvents = JsonConvert.DeserializeObject<IList<RootEventObject>>(jsonResponse);
                     }
 
-                    return upcomingEvents.FirstOrDefault().Event;
+                    return upcomingEvents.FirstOrDefault();
                 }
-            //}
+            }
 
-            //catch (WebException exception)
-            //{
-            //    throw new WebException("An error has occurred while calling GetUpcomingEvents method: " + exception.Message);
-            //}
+            catch (WebException exception)
+            {
+                throw new WebException("An error has occurred while calling GetUpcomingEvents method: " + exception.Message);
+            }
         } 
     }
 }
