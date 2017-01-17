@@ -42,10 +42,17 @@ namespace BHMDotNetAlexaSkill
                     innerResponse = new PlainTextOutputSpeech();
                     (innerResponse as PlainTextOutputSpeech).Text = "All systems online and nominal.";
                 }
-                if ("Introduction".Equals(input.Request.Intent.Name))
+                else if ("Introduction".Equals(input.Request.Intent.Name))
                 {
                     innerResponse = new PlainTextOutputSpeech();
-                    (innerResponse as PlainTextOutputSpeech).Text = "Good evening developers. My name is Alexa, and I'm proud to introduce tonight's speaker...well, the person speaking. Not an actual speaker, that's my job. Anyway, tonight's speaker is Blake Helms. He is a Software Development Manager at EBSCO Industries. There he is responsible for several core business applications and has been a driver for software craftsmanship and creating a culture that promotes mentorship and continuous improvement. He is one of the cofounders of the Birmingham dot net meetup. Blake is incredibly passionate about technology in all areas from writing code for work, to audio/video production for his church to automating his home. Now without further ado here is Blake Helms! ";
+                    (innerResponse as PlainTextOutputSpeech).Text = "Good evening developers. My name is Alexa, and I'm proud to introduce tonight's speaker...well, the person speaking. Not an actual speaker, he's a person...I'm a speaker... (pause for laughter... Wait I'm not supposed to read that part am I)... Anyway, tonight's speaker is Blake Helms. He is a Software Development Manager at EBSCO Industries. There he is responsible for several core business applications and has been a driver for software craftsmanship and creating a culture that promotes mentorship and continuous improvement. He is one of the cofounders of the Birmingham dot net meetup. Blake is incredibly passionate about technology in all areas from writing code for work, to audio/video production for his church to automating his home. Now without further ado, here is Blake Helms! ";
+                    _endSession = false;
+                }
+                else if ("ThankYou".Equals(input.Request.Intent.Name))
+                {
+                    innerResponse = new PlainTextOutputSpeech();
+                    (innerResponse as PlainTextOutputSpeech).Text = "My pleasure Blake. Good luck with your presentation! Just yell if you need me!";
+                    _endSession = true;
                 }
                 else if ("UpcomingEvent".Equals(input.Request.Intent.Name))
                 {
