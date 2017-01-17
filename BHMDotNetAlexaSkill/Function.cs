@@ -29,7 +29,7 @@ namespace BHMDotNetAlexaSkill
                 log.LogLine($"Default LaunchRequest made");
                 _endSession = false;
                 innerResponse = new PlainTextOutputSpeech();
-                (innerResponse as PlainTextOutputSpeech).Text = "Welcome to the Birmingham .NET Meetup.  You can say things like 'When is the next meetup?' or 'What meetups are in June?'";
+                (innerResponse as PlainTextOutputSpeech).Text = "Welcome to the Birmingham dot net Meetup.  You can say things like 'When is the next meetup?' or 'What meetups are in June?'";
             }
             else if (input.GetRequestType() == typeof(Slight.Alexa.Framework.Models.Requests.RequestTypes.IIntentRequest))
             {
@@ -40,7 +40,12 @@ namespace BHMDotNetAlexaSkill
                 if ("Test".Equals(input.Request.Intent.Name))
                 {
                     innerResponse = new PlainTextOutputSpeech();
-                    (innerResponse as PlainTextOutputSpeech).Text = "Atomic batteries to power. Turbines to speed. All systems online and nominal.";
+                    (innerResponse as PlainTextOutputSpeech).Text = "All systems online and nominal.";
+                }
+                if ("Introduction".Equals(input.Request.Intent.Name))
+                {
+                    innerResponse = new PlainTextOutputSpeech();
+                    (innerResponse as PlainTextOutputSpeech).Text = "Good evening developers. My name is Alexa, and I'm proud to introduce tonight's speaker...well, the person speaking. Not an actual speaker, that's my job. Anyway, tonight's speaker is Blake Helms. He is a Software Development Manager at EBSCO Industries. There he is responsible for several core business applications and has been a driver for software craftsmanship and creating a culture that promotes mentorship and continuous improvement. He is one of the cofounders of the Birmingham dot net meetup. Blake is incredibly passionate about technology in all areas from writing code for work, to audio/video production for his church to automating his home. Now without further ado here is Blake Helms! ";
                 }
                 else if ("UpcomingEvent".Equals(input.Request.Intent.Name))
                 {
