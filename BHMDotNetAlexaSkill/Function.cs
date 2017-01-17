@@ -15,12 +15,8 @@ namespace BHMDotNetAlexaSkill
 {
     public class Function
     {
-        /// <summary>
-        /// A simple function that takes a string and does a ToUpper
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        private bool _endSession = true;
+      
         public async Task<SkillResponse> FunctionHandler(SkillRequest input, ILambdaContext context)
         {
             Response response;
@@ -31,9 +27,9 @@ namespace BHMDotNetAlexaSkill
             {
                 // default launch request, let's just let them know what you can do
                 log.LogLine($"Default LaunchRequest made");
-
+                _endSession = false;
                 innerResponse = new PlainTextOutputSpeech();
-                (innerResponse as PlainTextOutputSpeech).Text = "Welcome to the Birmingham .NET Meetup.  You can ask me about upcoming meetups and events";
+                (innerResponse as PlainTextOutputSpeech).Text = "Welcome to the Birmingham .NET Meetup.  You can say things like 'When is the next meetup?' or 'What meetups are in June?'";
             }
             else if (input.GetRequestType() == typeof(Slight.Alexa.Framework.Models.Requests.RequestTypes.IIntentRequest))
             {
@@ -48,25 +44,37 @@ namespace BHMDotNetAlexaSkill
                 }
                 else if ("UpcomingEvent".Equals(input.Request.Intent.Name))
                 {
-                    var date = input.Request.Intent.Slots.Any() ? DateTime.Parse(input.Request.Intent.Slots.FirstOrDefault(x => x.Key == "Date").Value.Value) : DateTime.Now ;
-                    log.LogLine($"Date understood as {date.ToString()}");
-
                     log.LogLine($"New request for {input.Session.User.AccessToken}");
+
+                    var date = input.Request.Intent.Slots.Any() && 
+                        input.Request.Intent.Slots.FirstOrDefault(x => x.Key == "Date").Value != null && 
+                       !string.IsNullOrWhiteSpace(input.Request.Intent.Slots.FirstOrDefault(x => x.Key == "Date").Value.Value) ? 
+                        DateTime.Parse(input.Request.Intent.Slots.FirstOrDefault(x => x.Key.ToLower() == "date").Value.Value) : 
+                        DateTime.Now ;
+
+                    log.LogLine($"Date understood as {date.ToString()}");
+                    
                     var helper = new MeetupApiHelper(input.Session.User.AccessToken);
                     var upcomingEvent = await helper.GetUpcomingEvent(date);
 
                     log.LogLine($"Got response from Meetup{upcomingEvent}");
 
-                    innerResponse = new PlainTextOutputSpeech();
-                    (innerResponse as PlainTextOutputSpeech).Text = $"The next event is {upcomingEvent.name}.";
+                    var text = "No events for for that date. I'll let Robb and Blake know they need to plan better.";
+                    if(upcomingEvent != null)
+                    {
+                        text = $"{upcomingEvent.name}. On {DateTimeOffset.FromUnixTimeMilliseconds(upcomingEvent.time).ToString("d")}";
+                    }
 
-                  //  if(upcomingEvent)
+                    innerResponse = new PlainTextOutputSpeech();
+                    
+                    (innerResponse as PlainTextOutputSpeech).Text = text;
+                   
                 }
 
 
             }
             response = new Response();
-            response.ShouldEndSession = true;
+            response.ShouldEndSession = _endSession;
             response.OutputSpeech = innerResponse;
             SkillResponse skillResponse = new SkillResponse();
             skillResponse.Response = response;

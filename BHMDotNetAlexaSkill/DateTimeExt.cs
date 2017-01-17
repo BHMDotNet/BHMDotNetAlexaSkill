@@ -7,6 +7,7 @@ namespace BHMDotNetAlexaSkill
 {
     /// <summary>
     /// Some helper methods I created to deal with Unix time from Meetup because...yeah.
+    /// Honestly, why doesn't the DateTime class handle this nativley. This is 2017, we should not be dealing with problems from 1970 anymore.
     /// </summary>
     public static class DateTimeExt
     {

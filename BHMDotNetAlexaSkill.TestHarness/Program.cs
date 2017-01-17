@@ -14,8 +14,8 @@ namespace BHMDotNetAlexaSkill.TestHarness
 
         static async Task MainAsync()
         {
-            var helper = new MeetupApiHelper("52117f80e979b7c10aa2bf68fa5edb9f");
-            var UpcomingEvent = await helper.GetUpcomingEvent();
+            var helper = new MeetupApiHelper("391da51798081577500667a1e0e7b66f");
+            var UpcomingEvent = await helper.GetUpcomingEvent(DateTime.Parse("2017-06"));
         }
     }
 

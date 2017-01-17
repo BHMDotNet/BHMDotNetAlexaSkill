@@ -48,7 +48,7 @@ namespace BHMDotNetAlexaSkill
                         upcomingEvents = JsonConvert.DeserializeObject<IList<RootEventObject>>(jsonResponse);
                     }
 
-                    return upcomingEvents.FirstOrDefault();
+                    return upcomingEvents.FirstOrDefault(x => (DateTimeOffset.FromUnixTimeMilliseconds(x.time).Month == date.Month));
                 }
             }
 
